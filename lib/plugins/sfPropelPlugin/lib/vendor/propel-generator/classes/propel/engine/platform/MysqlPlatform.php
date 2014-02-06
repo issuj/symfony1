@@ -94,11 +94,11 @@ class MysqlPlatform extends DefaultPlatform {
 	 */
 	public function disconnectedEscapeText($text)
 	{
-		if (function_exists('mysql_escape_string')) {
-			return mysql_escape_string($text);
-		} else {
-			return addslashes($text);
-		}
+		// Supposedly equivalent to deprecated mysql_escape_string()
+	    $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
+	    $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
+
+	    return str_replace($search, $replace, $text);
 	}
 
 	/**
